@@ -49,7 +49,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # View the documentation for the provider you're using for more
   # information on available options.
 
-  config.vm.provision "shell", path: "install-dev-environment.sh"
+  #config.vm.provision "shell", path: "install-dev-environment.sh"
+  config.vm.provision "shell", path: "install-xfce4.sh"
+  #config.vm.provision "shell", path: "install-gnome.sh"
+  #config.vm.provision "shell", path: "install-dev-tools.sh"
+  #config.vm.provision "shell", path: "eclipse-features.sh"
 
   #config.vm.provision "shell", inline: <<-SHELL
   #  
