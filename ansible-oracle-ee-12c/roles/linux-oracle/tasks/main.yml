@@ -48,7 +48,7 @@
   shell: '~/disable_trans_hugepages.sh'
 
 # ==> Configure huge pages on Oracle Linux
-#- name: configure kernel for hugepages
-#  sysctl: name="vm.nr_hugepages" value="{{ hugepages_nr }}" state=present
-#  tags:
-#    - hugepages
+- name: configure kernel for hugepages
+  sysctl: name="vm.nr_hugepages" value="{{ hugepages_nr }}" state=present
+  tags:
+    - hugepages

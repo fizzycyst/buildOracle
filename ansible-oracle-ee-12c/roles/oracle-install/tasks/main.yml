@@ -65,12 +65,3 @@
 - name: enable oradb script to run at startup
   command: 'chkconfig --add oradb'
   become_user: root
-
-#- name: Create trigger for autostart pluggable db's
-#  copy: src=start-pluggable-dbs.sh dest={{ installation_folder }}/ mode=755
-#  tags:
-#    - start-pluggable
-
-#- shell: '{{ installation_folder }}/start-pluggable-dbs.sh'
-#  tags:
-#    - start-pluggable

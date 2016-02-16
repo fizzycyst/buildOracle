@@ -37,4 +37,4 @@ oracle_storage_type: 'FILE_SYSTEM_STORAGE'
 oracle_dataloc: '{{ oracle_base }}/oradata'
 oracle_recoveryloc: '{{ oracle_base }}/recovery_area'
 oracle_decline_security_updates: 'yes'
-#hugepages_nr: 578
+hugepages_nr: 578
