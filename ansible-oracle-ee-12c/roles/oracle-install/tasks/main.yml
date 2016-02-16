@@ -6,14 +6,16 @@
   file: state=directory path={{ installation_folder }}
 
 - name: Extract installation files
-  #command: 'unzip {{ installation_folder }}/{{ item }} -d {{ installation_folder }}/'
+  become_user: oracle
   unarchive: src=files/{{ item }} dest={{ installation_folder }}
   with_items: '{{ installer_archives }}'
 
 - name: Gerenerate the response file for software only installation
+  become_user: oracle
   template: src=db_install.rsp.j2 dest={{ installation_folder }}/db_install.rsp
 
 - name: Install Product
+  become_user: oracle
   command: '{{ installation_folder}}/database/runInstaller -silent -ignorePrereq -ignoreSysPrereqs -waitforcompletion -responseFile {{ installation_folder }}/db_install.rsp'
 
 - name: Execute Inventory root command
@@ -23,18 +25,6 @@
 - name: Execute DB home rfoot command
   command: '{{ oracle_home }}/root.sh'
   become_user: root
-
-- name: copy listener response file
-  template: src=netca.rsp.j2 dest={{ installation_folder }}/netca.rsp
-
-- name: Create listener using netca
-  command: '{{ oracle_home }}/bin/netca -silent -responseFile {{ installation_folder }}/netca.rsp'
-
-- name: copy response file for dbca
-  template: src=dbca.rsp.j2 dest={{ installation_folder }}/dbca.rsp
-
-- name: create database
-  command: '{{ oracle_home }}/bin/dbca -silent -responseFile {{ installation_folder }}/dbca.rsp'
 
 - name: create oracle home variable
   lineinfile: dest='/home/{{ oracle_user }}/.bashrc' line='export ORACLE_HOSTNAME={{ oracle_hostname }}'
@@ -53,6 +43,22 @@
 
 - name: add classpath
   lineinfile: dest='/home/{{ oracle_user }}/.bashrc' line='export CLASSPATH=$ORACLE_HOME/jlib:$ORACLE_HOME/rdbms/jlib'
+
+- name: copy listener response file
+  become_user: oracle
+  template: src=netca.rsp.j2 dest={{ installation_folder }}/netca.rsp
+
+- name: Create listener using netca
+  become_user: oracle
+  command: '{{ oracle_home }}/bin/netca -silent -responseFile {{ installation_folder }}/netca.rsp'
+
+- name: copy response file for dbca
+  become_user: oracle
+  template: src=dbca.rsp.j2 dest={{ installation_folder }}/dbca.rsp
+
+- name: create database
+  become_user: oracle
+  command: '{{ oracle_home }}/bin/dbca -silent -responseFile {{ installation_folder }}/dbca.rsp'
 
 - name: change oratab
   lineinfile: dest='/etc/oratab' regexp='^{{ oracle_sid }}:{{ oracle_home }}:N' line='{{ oracle_sid }}:{{ oracle_home }}:Y'
