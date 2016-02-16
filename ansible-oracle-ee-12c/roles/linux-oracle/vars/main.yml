@@ -4,7 +4,6 @@ packages_list:
   - bc
   - flex
   - unzip
-  - binutils
   - compat-libcap1
   - gcc
   - gcc-c++
@@ -16,6 +15,7 @@ packages_list:
   - libaio.i686
   - libaio-devel
   - libaio-devel.i686
+  #- libgcc.i686
   - libstdc++.i686
   - libstdc++-devel
   - libstdc++-devel.i686
@@ -25,21 +25,21 @@ packages_list:
   - libXtst.i686
   - sysstat
   - unixODBC
-  - unixODBC-devel
-  - compat-libstdc++-33
-  - compat-libstdc++-33.i686
-  - libgcc
-  - libgcc.i686
-  - libXext
-  - libXext.i686
-  - libXau
-  - libXau.i686
-  - libxcb
-  - libxcb.i686
-  - make
-  - sysstat
-  - zlib-devel
-  - zlib-devel.i686
+#  - binutils
+#  - unixODBC-devel
+#  - compat-libstdc++-33
+#  - compat-libstdc++-33.i686
+#  - libgcc
+#  - libgcc.i686
+#  - libXext
+#  - libXext.i686
+#  - libXau
+#  - libXau.i686
+#  - libxcb
+#  - libxcb.i686
+#  - make
+#  - zlib-devel
+#  - zlib-devel.i686
   #- libX11
   #- libX11.i686
 
