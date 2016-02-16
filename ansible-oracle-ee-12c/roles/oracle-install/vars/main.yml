@@ -1,6 +1,6 @@
 ---
 install_db: INSTALL_DB_SWONLY
-oracle_hostname: '{{ ansible_fqdn }}'
+oracle_hostname: 'oradbee12c.private'
 inventory_os_group: '{{ oracle_install_group }}'
 inventory_location: '{{ oracle_base }}/inventory'
 oracle_home: '{{ oracle_base }}/{{ oracle_user }}/product/{{ oracle_install_version }}/{{ dbhome_name }}'
@@ -18,13 +18,13 @@ oracle_edition: 'EE'
 oracle_dba_group: dba
 oracle_oper_group: oper
 oracle_database_type: 'GENERAL_PURPOSE'
-oracle_globalname: 'oradb.private'
+oracle_globalname: 'orcl'
 oracle_sid: 'orcl'
-create_container_database: 'true'
+create_container_database: 'false'
 number_of_pdbs: '1'
-oracle_conf_as_container_db: 'true'
-pdb_prefix: 'db'
-oracle_pdb_name: 'db01'
+oracle_conf_as_container_db: 'false'
+pdb_prefix: ''
+oracle_pdb_name: ''
 oracle_charset: 'AL32UTF8'
 oracle_memory_option: 'false'
 
@@ -32,9 +32,9 @@ oracle_memory_option: 'false'
 oracle_memory_mb: 1536
 oracle_install_samples: 'true'
 oracle_management_option: 'DEFAULT'
-oracle_enable_recovery: 'true'
+oracle_enable_recovery: 'false'
 oracle_storage_type: 'FILE_SYSTEM_STORAGE'
 oracle_dataloc: '{{ oracle_base }}/oradata'
 oracle_recoveryloc: '{{ oracle_base }}/recovery_area'
 oracle_decline_security_updates: 'yes'
-hugepages_nr: 578
+#hugepages_nr: 578

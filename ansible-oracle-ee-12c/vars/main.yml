@@ -4,4 +4,4 @@ oracle_install_group: oinstall
 extra_groups:
   - dba
   - oper
-oracle_base: /oracle/app
+oracle_base: /u01/app

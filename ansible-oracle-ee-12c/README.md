@@ -2,7 +2,9 @@
 
 This is an [Ansible](http://www.ansibleworks.com/) playbook for [Oracle EE 12c](http://www.oracle.com/technetwork/products/express-edition/overview/index.html). It can be used by itself or as part of a larger playbook.
 
-You can provision a Vagrant box with it or use it create Oracle XE base images for [Docker](https://www.docker.com/).
+You can provision a Vagrant box with it or use it create Oracle EE base images for [Docker](https://www.docker.com/).
+
+Based on https://github.com/cvezalis/oracledb-ansible
 
 ## Prerequisites
 
@@ -17,43 +19,6 @@ Download Oracle EE 12c release 1 from [oracle](http://www.oracle.com/technetwork
 You can access the Enterprise Manager Express using sys/sysdba and “oracle” as password.
 
 https://oradb.private:5500/em
-
-## Include role in a larger playbook
-
-### Add this role as a git submodule
-
-Assuming your playbook structure is such as:
-```
-- master-playbook
-  |- vars
-  |- roles
-  |- master-playbook-main.yml
-```
-
-Checkout this project as a submodule under roles:
-
-```
-$  cd roles
-$  git submodule add git://github.com/walokra/ansible-oracle-ee.git ./ansible-oracle-ee
-$  git submodule update --init
-$  git commit ./ansible-oracle-ee -m "Added ansible-oracle-ee as ./ansible-oracle-ee"
-```
-
-### Include this playbook as a role in your master playbook
-
-`master-playbook-main.yml`:
-
-```
----
-
-# Oracle EE install
-- hosts: localhost
-  user: vagrant
-  become: yes
-
-  roles:
-    - ansible-oracle-ee
-```
 
 # License
 

@@ -5,10 +5,6 @@
 - name: Create folder for installation files
   file: state=directory path={{ installation_folder }}
 
-#- name: Copy installer files
-#  copy: src={{ item }} dest='{{ installation_folder }}/'
-#  with_items: '{{ installer_archives }}'
-
 - name: Extract installation files
   #command: 'unzip {{ installation_folder }}/{{ item }} -d {{ installation_folder }}/'
   unarchive: src=files/{{ item }} dest={{ installation_folder }}
@@ -20,7 +16,7 @@
 - name: Install Product
   command: '{{ installation_folder}}/database/runInstaller -silent -ignorePrereq -ignoreSysPrereqs -waitforcompletion -responseFile {{ installation_folder }}/db_install.rsp'
 
-- name: Execute Inventoty root command
+- name: Execute Inventory root command
   command: '{{ inventory_location }}/orainstRoot.sh'
   become_user: root
 
@@ -41,6 +37,9 @@
   command: '{{ oracle_home }}/bin/dbca -silent -responseFile {{ installation_folder }}/dbca.rsp'
 
 - name: create oracle home variable
+  lineinfile: dest='/home/{{ oracle_user }}/.bashrc' line='export ORACLE_HOSTNAME={{ oracle_hostname }}'
+
+- name: create oracle home variable
   lineinfile: dest='/home/{{ oracle_user }}/.bashrc' line='export ORACLE_HOME={{ oracle_home }}'
 
 - name: create oracle sid variable
@@ -48,6 +47,12 @@
 
 - name: add oracle home bin folder
   lineinfile: dest='/home/{{ oracle_user }}/.bashrc' line='export PATH=$PATH:$ORACLE_HOME/bin'
+
+- name: add ld_library path
+  lineinfile: dest='/home/{{ oracle_user }}/.bashrc' line='export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib:/usr/lib'
+
+- name: add classpath
+  lineinfile: dest='/home/{{ oracle_user }}/.bashrc' line='export CLASSPATH=$ORACLE_HOME/jlib:$ORACLE_HOME/rdbms/jlib'
 
 - name: change oratab
   lineinfile: dest='/etc/oratab' regexp='^{{ oracle_sid }}:{{ oracle_home }}:N' line='{{ oracle_sid }}:{{ oracle_home }}:Y'
@@ -60,3 +65,12 @@
 - name: enable oradb script to run at startup
   command: 'chkconfig --add oradb'
   become_user: root
+
+#- name: Create trigger for autostart pluggable db's
+#  copy: src=start-pluggable-dbs.sh dest={{ installation_folder }}/ mode=755
+#  tags:
+#    - start-pluggable
+
+#- shell: '{{ installation_folder }}/start-pluggable-dbs.sh'
+#  tags:
+#    - start-pluggable
