@@ -3,7 +3,7 @@ packages_list_oracle:
   - oracle-rdbms-server-12cR1-preinstall
   - unzip
 
-packages_list_redhat:
+packages_list_centos:
   - unzip
   - compat-libcap1
   - gcc

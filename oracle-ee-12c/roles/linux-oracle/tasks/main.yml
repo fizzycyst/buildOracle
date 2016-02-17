@@ -6,10 +6,10 @@
   yum: name={{ item }} state=present
   with_items: packages_list_oracle
 
-- name: Install required libraries for RedHat Linux
+- name: Install required libraries for CentOS Linux
   yum: name={{ item }} state=present
-  with_items: packages_list_redhat
-  when: ansible_os_family == "RedHat"
+  with_items: packages_list_centos
+  when: ansible_distribution == "CentOS"
 
 - name: Disable SELinux
   selinux: state=disabled
@@ -56,13 +56,13 @@
 - name: Copy script
   copy: src=disable_trans_hugepages.sh dest='~/disable_trans_hugepages.sh' mode=755
 
-- name: Disable Transparent Huge Pages
-  when: ansible_os_family == "RedHat"
+- name: Disable Transparent Huge Pages on CentOS
+  when: ansible_distribution == "CentOS"
   shell: '~/disable_trans_hugepages.sh'
 
 # ==> Configure huge pages
-- name: configure kernel for hugepages
+- name: configure kernel for hugepages on CentOS
   sysctl: name="vm.nr_hugepages" value="{{ hugepages_nr }}" state=present
-  when: ansible_os_family == "RedHat"
+  when: ansible_distribution == "CentOS"
   tags:
     - hugepages

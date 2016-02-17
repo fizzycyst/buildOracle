@@ -18,14 +18,6 @@
   become_user: oracle
   command: '{{ installation_folder}}/database/runInstaller -waitforcompletion -ignoreSysPrereqs -ignorePrereq -silent -noconfig -responseFile {{ installation_folder }}/db_install.rsp'
 
-- name: Execute Inventory root command
-  command: '{{ inventory_location }}/orainstRoot.sh'
-  become_user: root
-
-- name: Execute DB home root command
-  command: '{{ oracle_home }}/root.sh'
-  become_user: root
-
 - name: create oracle home variable
   lineinfile: dest='/home/{{ oracle_user }}/.bashrc' line='export ORACLE_HOSTNAME={{ oracle_hostname }}'
 
@@ -47,29 +39,61 @@
 - name: add classpath
   lineinfile: dest='/home/{{ oracle_user }}/.bashrc' line='export CLASSPATH=$ORACLE_HOME/jlib:$ORACLE_HOME/rdbms/jlib'
 
-- name: add listener home
-  lineinfile: dest='/home/{{ oracle_user }}/.bashrc' line='export ORACLE_HOME_LISTNER=$ORACLE_HOME'
+- name: Execute Inventory root command
+  command: '{{ inventory_location }}/orainstRoot.sh'
+  become_user: root
+
+- name: Execute DB home root command
+  command: '{{ oracle_home }}/root.sh'
+  become_user: root
+
+- stat: path={{ oracle_home }}/lib/libjavavm12.a
+  register: libjavavm12
+
+- name: copy libjavavm12 to lib
+  command: cp {{ oracle_home }}/javavm/jdk/jdk6/lib/libjavavm12.a {{ oracle_home }}/lib/
+  when: not libjavavm12.stat.exists
+
+- stat: path={{ oracle_home }}/bin/oracle
+  register: oracle_bin
+
+- name: move config for relinking
+  command: mv {{ oracle_home }}/rdbms/lib/config.o {{ oracle_home }}/rdbms/lib/config.o.bak
+  ignore_errors: yes
+  when: not oracle_bin.stat.size > 0
+
+- name: make ins_rdbms.mk install for relinking
+  #command: 'chdir={{ oracle_home }}/rdbms/lib make -f ins_rdbms.mk install'
+  command: bash -lc "cd {{ oracle_home }}/rdbms/lib && make -f ins_rdbms.mk install"
+  when: not oracle_bin.stat.size > 0
+
+- name: make ins_net_server.mk install for relinking
+  #command: 'chdir={{ oracle_home }}/network/lib make -f ins_net_server.mk install'
+  command: bash -lc "cd {{ oracle_home }}/network/lib && make -f ins_net_server.mk install"
+  when: not oracle_bin.stat.size > 0
+
+# - name: Source the bashrc file
+#   shell: source /home/{{ oracle_user }}/.bashrc
+#   when: not oracle_bin.stat.size > 0
+- name: relink oracle
+  command: '{{ oracle_home }}/bin/relink all'
+  when: not oracle_bin.stat.size > 0
+  environment:
+    ORACLE_HOME: '{{ oracle_home }}'
 
 - name: copy listener response file
-  become_user: oracle
   template: src=netca.rsp.j2 dest={{ installation_folder }}/netca.rsp
   register: listener_config_file_created
 
 - name: Create listener using netca
-  become_user: oracle
   command: '{{ oracle_home }}/bin/netca -silent -responseFile {{ installation_folder }}/netca.rsp'
   when: listener_config_file_created|success
 
 - name: copy response file for dbca
-  become_user: oracle
   template: src=dbca.rsp.j2 dest={{ installation_folder }}/dbca.rsp
   register: database_config_file_created
 
-- name: fix oracle linking
-  command: cp {{ oracle_home }}/javavm/jdk/jdk6/lib/libjavavm12.a {{ oracle_home }}/lib/
-
 - name: create database
-  become_user: oracle
   command: '{{ oracle_home }}/bin/dbca -silent -responseFile {{ installation_folder }}/dbca.rsp'
 
 - name: change oratab
