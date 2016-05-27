@@ -18,7 +18,7 @@
   become_user: oracle
   command: '{{ installation_folder}}/database/runInstaller -waitforcompletion -ignoreSysPrereqs -ignorePrereq -silent -noconfig -responseFile {{ installation_folder }}/db_install.rsp'
 
-- name: create oracle home variable
+- name: create oracle hostname variable
   lineinfile: dest='/home/{{ oracle_user }}/.bashrc' line='export ORACLE_HOSTNAME={{ oracle_hostname }}'
 
 - name: create oracle home variable

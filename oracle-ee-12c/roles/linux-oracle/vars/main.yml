@@ -2,6 +2,8 @@
 packages_list_oracle:
   - oracle-rdbms-server-12cR1-preinstall
   - unzip
+  - libselinux-python
+  - sudo
 
 packages_list_centos:
   - unzip

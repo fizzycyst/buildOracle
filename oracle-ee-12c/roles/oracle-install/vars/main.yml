@@ -4,7 +4,7 @@ install_db: INSTALL_DB_SWONLY
 oracle_hostname: 'oradb12c'
 inventory_os_group: '{{ oracle_install_group }}'
 inventory_location: '{{ oracle_base }}/inventory'
-oracle_home: '{{ oracle_base }}/{{ oracle_user }}/product/{{ oracle_install_version }}/{{ dbhome_name }}'
+oracle_home: '{{ oracle_base }}/product/{{ oracle_install_version }}/{{ dbhome_name }}'
 
 installer_archives:
   - 'linuxamd64_12102_database_1of2.zip'

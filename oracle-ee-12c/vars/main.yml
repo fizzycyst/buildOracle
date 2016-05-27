@@ -4,6 +4,6 @@ oracle_install_group: oinstall
 extra_groups:
   - dba
   - oper
-oracle_base: /u01/app
+oracle_base: /u01/app/oracle
 
 #server_hostname: '{{ ansible_fqdn }}'
