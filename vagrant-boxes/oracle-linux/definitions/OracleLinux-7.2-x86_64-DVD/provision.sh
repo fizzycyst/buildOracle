@@ -5,9 +5,6 @@
 
 echo $(grep PRETTY_NAME /etc/os-release | cut -d'"' -f2)
 
-# EPEL for Enterprise Linux 7 already set in base.sh
-# rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-
 # Start provisioning
 yum install -y bash bash-completion zsh tmux \
     wget curl gawk ack \
@@ -21,7 +18,8 @@ yum install -y bash bash-completion zsh tmux \
     lshw pciutils usbutils \
     strace gdb \
     reptyr ntsysv \
-    yum-utils
+    yum-utils \
+	ansible
 
 ret=$?
 

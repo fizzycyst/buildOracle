@@ -4,13 +4,14 @@ source ./proxy.sh
 
 sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
 
+# Fix slow DNS lookups with VirtualBox's DNS proxy:
+# https://github.com/mitchellh/vagrant/issues/1172#issuecomment-9438465
+echo 'options single-request-reopen' >> /etc/resolv.conf
+
 cd /tmp
 wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 rpm -ivh epel-release-latest-7.noarch.rpm
 rm -f epel-release-latest-7.noarch.rpm
-# Not flexible to switch between direct Internet access and behind firewall
-# --httpproxy HOST --httpport PORT
-# rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 
 echo "UseDNS no" >> /etc/ssh/sshd_config
 
