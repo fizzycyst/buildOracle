@@ -4,11 +4,11 @@
 
 - name: Install required libraries for Oracle Linux
   yum: name={{ item }} state=present
-  with_items: packages_list_oracle
+  with_items: " {{ packages_list_oracle }} "
 
 - name: Install required libraries for CentOS Linux
   yum: name={{ item }} state=present
-  with_items: packages_list_centos
+  with_items: " {{ packages_list_centos }} "
   when: ansible_distribution == "CentOS"
 
 #- name: Disable SELinux

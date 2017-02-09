@@ -1,6 +1,6 @@
 ---
 - name: Configure CentOS with Oracle Database 12c
-  hosts: localhost
+  hosts: all
   become: true
   vars_files:
     - vars/main.yml

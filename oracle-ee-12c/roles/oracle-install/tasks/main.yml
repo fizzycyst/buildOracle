@@ -16,7 +16,7 @@
 
 - name: Install Product
   become_user: oracle
-  command: '{{ installation_folder}}/database/runInstaller -waitforcompletion -ignoreSysPrereqs -ignorePrereq -silent -noconfig -responseFile {{ installation_folder }}/db_install.rsp'
+  command: '{{ installation_folder}}/database/runInstaller -waitforcompletion -ignoreSysPrereqs -ignorePrereq -silent -noconfig -responseFile {{ installation_folder }}/db_install.rsp SECURITY_UPDATES_VIA_MYORACLESUPPORT=false DECLINE_SECURITY_UPDATES=true'
 
 - name: create oracle hostname variable
   lineinfile: dest='/home/{{ oracle_user }}/.bashrc' line='export ORACLE_HOSTNAME={{ oracle_hostname }}'
