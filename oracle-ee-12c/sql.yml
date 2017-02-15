@@ -1,0 +1,17 @@
+---
+- hosts: oracle
+  become: yes
+  become_user: oracle
+  tasks:
+
+
+
+  - name: execute statement
+    shell: " source /home/oracle/.bash_profile  &&   /u01/app/oracle/product/12.1.0/dbhome_1/bin/sqlplus sys as sysdba @quick sql.sqlcode set feedback off; set pagesize 0; set linesize 10000;"
+    register: sql_out
+    failed_when: "'ERROR' in sql_out.stdout"
+
+  - name: execute statement
+    shell: " source /home/oracle/.bash_profile  &&   /u01/app/oracle/product/12.1.0/dbhome_1/bin/sqlplus sys as sysdba @god sql.sqlcode set feedback off; set pagesize 0; set linesize 10000;"
+    register: bad_out
+    failed_when: "'ERROR' in bad_out.stdout"

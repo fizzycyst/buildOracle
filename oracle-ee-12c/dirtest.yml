@@ -1,0 +1,32 @@
+---
+- hosts: oracle
+  become: yes
+  become_user: oracle
+
+  tasks:
+
+
+  - name: Check hosts file in place and owned by root
+    stat: path=/etc/hosts
+    register: stan
+    failed_when: stan.stat.pw_name != 'root'
+
+  - name: Check sqlplus file in place and owned by oracle
+    stat: path=/u01/app/oracle/product/12.1.0/dbhome_1/bin/sqlplus
+    register: stan
+    failed_when: stan.stat.pw_name != 'oracle'
+
+  - name: Check oradb file in place and owned by root
+    stat: path=/etc/init.d/oradb
+    register: stan
+    failed_when: stan.stat.pw_name != 'root'
+
+  - name: First SQL Statement -- Table Check
+    shell: " source /home/oracle/.bash_profile  &&   /u01/app/oracle/product/12.1.0/dbhome_1/bin/sqlplus sys as sysdba @checkora sql.sqlcode set feedback off; set pagesize 0; set linesize 10000;"
+    register: sql_out
+    failed_when: "'ERROR' in sql_out.stdout"
+
+  - name: First SQL Statement -- Table Check -- This one should fail
+    shell: " source /home/oracle/.bash_profile  &&   /u01/app/oracle/product/12.1.0/dbhome_1/bin/sqlplus sys as sysdba @god sql.sqlcode set feedback off; set pagesize 0; set linesize 10000;"
+    register: sql_out
+    failed_when: "'ERROR' in sql_out.stdout"
